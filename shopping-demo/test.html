@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车小实例</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/text.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="js/test.js"></script>
+</head>
+<body>
+    <div class="container my-3" id="app">
+        <h4 class="text-white bg-info py-2 px-3 border-radius">Vue测试监听查询购物车数量及金额变化</h4>
+        <div class="mt-4">
+            <div class="input-group mb-3">
+                <button class="btn btn-info input-group-prepend">名称搜索</button>
+                <input type="search" class="form-control" placeholder="请输入查询内容"
+                       v-model="searching" @input="newLists">
+            </div>
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>图片</th>
+                        <th>商品名称</th>
+                        <th>商品数量</th>
+                        <th>商品单价(元)</th>
+                        <th>商品金额(元)</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-if="isHas">
+                        <td colspan="6" class="text-muted">未找到您搜索的商品...</td>
+                    </tr>
+                    <tr v-for="(item,index) in newSearch" :key="item.id">
+                        <td>
+                            <img :src="item.img" alt="">
+                        </td>
+                        <td>{{item.name}}</td>
+                        <td>
+                            <button class="btn btn-outline-warning btn-sm" @click="changeNum(-1, index)">-</button>
+                            <span>{{item.number}}</span>
+                            <button class="btn btn-outline-warning btn-sm" @click="changeNum(1, index)">+</button>
+                        </td>
+                        <td>{{item.price | changeDollar}}</td>
+                        <td>{{item.number*item.price | changeDollar}}</td>
+                        <td>
+                            <button class="btn btn-danger" @click="del(index)">删除</button>
+                        </td>
+                    </tr>
+                    <tr v-if="!isHas">
+                        <td colspan="6">
+                            <span class="text-danger font-weight-bold">{{totalNum}}</span> 件商品总计（不含运费）：
+                            <span class="font-weight-bold">{{totalPrice | changeDollar}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
